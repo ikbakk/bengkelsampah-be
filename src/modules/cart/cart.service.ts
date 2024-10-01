@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cart } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -12,5 +12,24 @@ export class CartService {
         userId,
       },
     });
+  }
+
+  async findUserCart(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const cartItems = await this.prisma.cart.findFirst({
+      where: {
+        userId,
+      },
+      select: {
+        cartItems: true,
+      },
+    });
+
+    return cartItems.cartItems;
   }
 }

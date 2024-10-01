@@ -11,13 +11,6 @@ export class CustomerService {
       where: {
         role: Role.CUSTOMER,
       },
-      include: {
-        cart: {
-          include: {
-            cartItems: true,
-          },
-        },
-      },
     });
   }
 
@@ -25,13 +18,6 @@ export class CustomerService {
     return await this.prismaService.user.findUnique({
       where: {
         phoneNumber,
-      },
-      include: {
-        cart: {
-          include: {
-            cartItems: true,
-          },
-        },
       },
     });
   }
