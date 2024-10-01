@@ -90,6 +90,8 @@ model Waste {
   id               String            @id @default(uuid())
   name             String
   type             WasteType
+  price            Float
+  unit             String
   cartItems        CartItem[]
   wasteSubmissions WasteSubmission[]
 }
