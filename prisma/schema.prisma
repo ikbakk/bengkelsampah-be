@@ -1,0 +1,158 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql" // Adjust this based on your database
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  phoneNumber  String        @unique
+  passwordHash String
+  name         String
+  address      String?
+  role         Role
+  createdAt    DateTime      @default(now())
+  partner      Partner?
+  customer     Customer?
+  driver       Driver?
+  member       Member?
+  cart         Cart?
+  transactions Transaction[]
+}
+
+model Partner {
+  id                 String @id @default(uuid())
+  businessName       String
+  registrationNumber String
+  userId             String @unique
+  user               User   @relation(fields: [userId], references: [id])
+}
+
+model Customer {
+  id      String @id @default(uuid())
+  balance Float
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model Driver {
+  id     String       @id @default(uuid())
+  status DriverStatus
+  userId String       @unique
+  user   User         @relation(fields: [userId], references: [id])
+}
+
+model Member {
+  id          String    @id @default(uuid())
+  balance     Float
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+  wasteBankId String
+  wasteBank   WasteBank @relation(fields: [wasteBankId], references: [id])
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  cartItems CartItem[]
+  createdAt DateTime   @default(now())
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  wasteId   String
+  waste     Waste    @relation(fields: [wasteId], references: [id])
+  price     Float
+  weight    Float
+  createdAt DateTime @default(now())
+
+  @@unique([cartId, wasteId])
+}
+
+model WasteBank {
+  id           String        @id @default(uuid())
+  name         String
+  address      String
+  members      Member[]
+  transactions Transaction[]
+}
+
+model Waste {
+  id               String            @id @default(uuid())
+  name             String
+  type             WasteType
+  cartItems        CartItem[]
+  wasteSubmissions WasteSubmission[]
+}
+
+model Transaction {
+  id               String            @id @default(uuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id])
+  wasteBankId      String
+  wasteBank        WasteBank         @relation(fields: [wasteBankId], references: [id])
+  status           TransactionStatus
+  source           TransactionSource
+  createdAt        DateTime          @default(now())
+  wasteSubmissions WasteSubmission[]
+}
+
+model WasteSubmission {
+  id            String      @id @default(uuid())
+  wasteId       String
+  waste         Waste       @relation(fields: [wasteId], references: [id])
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  weight        Float
+}
+
+model News {
+  id        String   @id @default(uuid())
+  title     String
+  imageUrl  String
+  imageDesc String
+  content   String
+  author    String
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  PARTNER
+  CUSTOMER
+  DRIVER
+  MEMBER
+}
+
+enum DriverStatus {
+  AVAILABLE
+  BUSY
+  OFFLINE
+}
+
+enum WasteType {
+  ORGANIC
+  INORGANIC
+  RECYCLABLE
+  HAZARDOUS
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum TransactionSource {
+  WASTE_SUBMISSION
+  PURCHASE
+}
