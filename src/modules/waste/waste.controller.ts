@@ -11,7 +11,7 @@ import { WasteService } from './waste.service';
 import { CreateWasteDto } from './dto/createWaste.dto';
 import { UpdateWasteDto } from './dto/updateWaste.dto';
 
-@Controller('waste')
+@Controller('wastes')
 export class WasteController {
   constructor(private readonly wasteService: WasteService) {}
 

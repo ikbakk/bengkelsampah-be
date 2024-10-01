@@ -3,3 +3,4 @@ export * from './customer/customer.module';
 export * from './prisma/prisma.module';
 export * from './user/user.module';
 export * from './core/jwt/jwt.module';
+export * from './waste/waste.module';
