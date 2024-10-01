@@ -5,12 +5,14 @@ import { AppService } from './app.service';
 import {
   CartModule,
   CustomerModule,
+  GLobalJwtModule,
   PrismaModule,
   UserModule,
 } from './modules';
 
 @Module({
   imports: [
+    GLobalJwtModule,
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     UserModule,

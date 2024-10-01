@@ -5,13 +5,7 @@ import { UserService } from './user.service';
 import { CartModule } from '../cart/cart.module';
 
 @Module({
-  imports: [
-    CartModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
-    }),
-  ],
+  imports: [CartModule],
   providers: [UserService],
   controllers: [UserController],
 })
