@@ -79,7 +79,7 @@ CREATE TABLE "CartItem" (
     "cartId" TEXT NOT NULL,
     "wasteId" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
-    "weight" DOUBLE PRECISION NOT NULL,
+    "quantity" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "CartItem_pkey" PRIMARY KEY ("id")
@@ -99,6 +99,8 @@ CREATE TABLE "Waste" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "type" "WasteType" NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "unit" TEXT NOT NULL,
 
     CONSTRAINT "Waste_pkey" PRIMARY KEY ("id")
 );
