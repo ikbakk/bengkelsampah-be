@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CartService } from '../cart/cart.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -61,6 +62,44 @@ export class UserService {
     const accessToken = this.jwtService.sign(payload);
 
     return accessToken;
+  }
+
+  async findByPhoneNumber(phoneNumber: string) {
+    return await this.prisma.user.findUnique({
+      where: { phoneNumber },
+    });
+  }
+
+  async getAll() {
+    return await this.prisma.user.findMany();
+  }
+
+  async edit(phoneNumber: string, updateUserDto: UpdateUserDto) {
+    const user = await this.prisma.user.update({
+      where: { phoneNumber },
+      data: updateUserDto,
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (updateUserDto.password) {
+      const hashedPassword = await bcrypt.hash(updateUserDto.password, 10);
+      await this.prisma.user.update({
+        where: { phoneNumber },
+        data: { passwordHash: hashedPassword },
+      });
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        phoneNumber,
+      },
+      data: updateUserDto,
+    });
+
+    return updatedUser;
   }
 }
 

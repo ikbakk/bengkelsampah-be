@@ -1,8 +1,19 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  BadRequestException,
+  Get,
+  Param,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtGuard } from '../guards/jwt/jwt.guard';
 
 @Controller('users')
 export class UserController {
@@ -33,5 +44,24 @@ export class UserController {
       accessToken,
       statusCode: 200,
     };
+  }
+
+  @Get()
+  async getAll() {
+    return await this.userService.getAll();
+  }
+
+  @Get(':phoneNumber')
+  async findByPhoneNumber(@Param('phoneNumber') phoneNumber: string) {
+    return await this.userService.findByPhoneNumber(phoneNumber);
+  }
+
+  @Put('/edit/:phoneNumber')
+  @UseGuards(JwtGuard)
+  async edit(
+    @Param('phoneNumber') phoneNumber: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.userService.edit(phoneNumber, updateUserDto);
   }
 }
