@@ -8,6 +8,7 @@ import {
   GLobalJwtModule,
   PrismaModule,
   UserModule,
+  WasteModule,
 } from './modules';
 
 @Module({
@@ -18,6 +19,7 @@ import {
     UserModule,
     CustomerModule,
     CartModule,
+    WasteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
