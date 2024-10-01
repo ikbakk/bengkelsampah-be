@@ -12,7 +12,11 @@ export class CustomerService {
         role: Role.CUSTOMER,
       },
       include: {
-        cart: true,
+        cart: {
+          include: {
+            cartItems: true,
+          },
+        },
       },
     });
   }
@@ -23,7 +27,11 @@ export class CustomerService {
         phoneNumber,
       },
       include: {
-        cart: true,
+        cart: {
+          include: {
+            cartItems: true,
+          },
+        },
       },
     });
   }
