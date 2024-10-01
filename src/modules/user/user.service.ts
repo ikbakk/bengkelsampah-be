@@ -65,7 +65,7 @@ export class UserService {
     };
     const accessToken = this.jwtService.sign(payload);
 
-    return accessToken;
+    return `Bearer ${accessToken}`;
   }
 
   async findByPhoneNumber(phoneNumber: string) {
