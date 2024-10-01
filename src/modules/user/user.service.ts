@@ -58,7 +58,11 @@ export class UserService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const payload = { userId: user.id, phoneNumber: user.phoneNumber };
+    const payload = {
+      userId: user.id,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+    };
     const accessToken = this.jwtService.sign(payload);
 
     return accessToken;
