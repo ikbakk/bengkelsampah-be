@@ -10,20 +10,24 @@ export class JwtGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('JwtGuard: canActivate called');
+
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
 
-    const token = request.headers['authorization'];
-
+    const token = request.headers.authorization.split(' ')[1];
     if (!token) {
+      console.log('JwtGuard: No token provided');
       return false;
     }
 
     try {
       const decoded = await this.jwtService.verify(token);
+      console.log('JwtGuard: Token verified successfully');
       request.user = decoded;
       return true;
     } catch (error) {
+      console.log('JwtGuard: Error verifying token', error);
       return false;
     }
   }

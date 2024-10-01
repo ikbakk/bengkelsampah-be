@@ -14,6 +14,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from '../guards/jwt/jwt.guard';
+import { OwnUserGuard } from '../guards/ownUser/ownUser.guard';
 
 @Controller('users')
 export class UserController {
@@ -57,7 +58,7 @@ export class UserController {
   }
 
   @Put('/edit/:phoneNumber')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, OwnUserGuard)
   async edit(
     @Param('phoneNumber') phoneNumber: string,
     @Body() updateUserDto: UpdateUserDto,
