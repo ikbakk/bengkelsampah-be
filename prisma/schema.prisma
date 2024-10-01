@@ -72,7 +72,7 @@ model CartItem {
   wasteId   String
   waste     Waste    @relation(fields: [wasteId], references: [id])
   price     Float
-  weight    Float
+  quantity  Float
   createdAt DateTime @default(now())
 
   @@unique([cartId, wasteId])
