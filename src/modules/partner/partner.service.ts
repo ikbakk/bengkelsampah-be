@@ -9,7 +9,11 @@ export class PartnerService {
 
   async create(createPartnerDto: CreatePartnerDto) {
     return await this.prismaService.partner.create({
-      data: createPartnerDto,
+      data: {
+        businessName: createPartnerDto.businessName,
+        registrationNumber: createPartnerDto.registrationNumber,
+        userId: createPartnerDto.userId,
+      },
     });
   }
 
