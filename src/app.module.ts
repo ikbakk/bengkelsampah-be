@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import {
   CartModule,
   CustomerModule,
+  DriverModule,
   GLobalJwtModule,
   PrismaModule,
   UserModule,
@@ -20,6 +21,7 @@ import {
     CustomerModule,
     CartModule,
     WasteModule,
+    DriverModule,
   ],
   controllers: [AppController],
   providers: [AppService],

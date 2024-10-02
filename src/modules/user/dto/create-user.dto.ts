@@ -23,3 +23,23 @@ export class CreateUserDto {
   @IsEnum(Role)
   role: Role; // Add role for the user
 }
+
+export class CreateUserDtoWithoutRole {
+  // @IsEmail()
+  // email: string;
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  address: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}

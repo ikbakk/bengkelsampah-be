@@ -6,18 +6,32 @@ import {
   Param,
   Put,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { DriverService } from './driver.service';
 import { CreateDriverDto } from './dto/createDriver.dto';
 import { UpdateDriverDto } from './dto/updateDriver.dto';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
-@Controller('driver')
+@Controller('drivers')
 export class DriverController {
   constructor(private driverService: DriverService) {}
 
   @Post()
   async create(@Body() createDriverDto: CreateDriverDto) {
-    return await this.driverService.create(createDriverDto);
+    try {
+      await this.driverService.create(createDriverDto);
+      return {
+        message: 'User created successfully',
+        statusCode: 201,
+      };
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Phone number already exists');
+      }
+
+      throw new ExceptionsHandler();
+    }
   }
 
   @Get()

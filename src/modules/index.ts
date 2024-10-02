@@ -4,3 +4,6 @@ export * from './prisma/prisma.module';
 export * from './user/user.module';
 export * from './core/jwt/jwt.module';
 export * from './waste/waste.module';
+export * from './partner/partner.module';
+export * from './driver/driver.module';
+export * from './wasteBank/wasteBank.module';

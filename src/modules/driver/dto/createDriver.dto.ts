@@ -1,10 +1,3 @@
-import { IsEnum, IsString } from 'class-validator';
-import { DriverStatus } from 'src/types/enums/driverStatus';
+import { CreateUserDtoWithoutRole } from 'src/modules/user/dto/create-user.dto';
 
-export class CreateDriverDto {
-  @IsEnum(DriverStatus)
-  driverStatus: DriverStatus;
-
-  @IsString()
-  userId: string;
-}
+export class CreateDriverDto extends CreateUserDtoWithoutRole {}
