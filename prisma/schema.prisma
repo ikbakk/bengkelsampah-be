@@ -1,7 +1,8 @@
 // schema.prisma
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -58,11 +59,13 @@ model Member {
 }
 
 model Cart {
-  id        String     @id @default(uuid())
-  userId    String     @unique
-  user      User       @relation(fields: [userId], references: [id])
-  cartItems CartItem[]
-  createdAt DateTime   @default(now())
+  id            String     @id @default(uuid())
+  userId        String     @unique
+  user          User       @relation(fields: [userId], references: [id])
+  totalPrice    Float
+  totalQuantity Float
+  cartItems     CartItem[]
+  createdAt     DateTime   @default(now())
 }
 
 model CartItem {
@@ -87,13 +90,12 @@ model WasteBank {
 }
 
 model Waste {
-  id               String            @id @default(uuid())
-  name             String
-  type             WasteType
-  price            Float
-  unit             String
-  cartItems        CartItem[]
-  wasteSubmissions WasteSubmission[]
+  id        String     @id @default(uuid())
+  name      String
+  type      WasteType
+  price     Float
+  unit      String
+  cartItems CartItem[]
 }
 
 model Transaction {
@@ -105,16 +107,7 @@ model Transaction {
   status           TransactionStatus
   source           TransactionSource
   createdAt        DateTime          @default(now())
-  wasteSubmissions WasteSubmission[]
-}
-
-model WasteSubmission {
-  id            String      @id @default(uuid())
-  wasteId       String
-  waste         Waste       @relation(fields: [wasteId], references: [id])
-  transactionId String
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
-  weight        Float
+  wasteSubmissions String[]
 }
 
 model News {
@@ -149,12 +142,14 @@ enum WasteType {
 }
 
 enum TransactionStatus {
-  PENDING
+  READY
+  PROCESSING
   COMPLETED
-  CANCELLED
+  CANCELED
 }
 
 enum TransactionSource {
-  WASTE_SUBMISSION
-  PURCHASE
+  DIRECT
+  PARTNER
+  WASTE_BANK
 }

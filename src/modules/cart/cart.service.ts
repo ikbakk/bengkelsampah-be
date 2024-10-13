@@ -15,6 +15,8 @@ export class CartService {
     return this.prisma.cart.create({
       data: {
         userId,
+        totalPrice: 0,
+        totalQuantity: 0,
       },
     });
   }
@@ -46,6 +48,8 @@ export class CartService {
             createdAt: true,
           },
         },
+        totalPrice: true,
+        totalQuantity: true,
       },
     });
 
@@ -86,7 +90,8 @@ export class CartService {
 
     const newCartItem = await this.prisma.cartItem.create({
       data: {
-        ...createCartItemDto,
+        wasteId: createCartItemDto.wasteId,
+        quantity: createCartItemDto.quantity,
         cartId: userCart.id,
         price: waste.price * createCartItemDto.quantity,
       },
@@ -102,6 +107,20 @@ export class CartService {
         createdAt: true,
         price: true,
         quantity: true,
+      },
+    });
+
+    const updatedTotalPrice = userCart.totalPrice + newCartItem.price;
+    const updatedTotalQuantity =
+      userCart.totalQuantity + createCartItemDto.quantity;
+
+    await this.prisma.cart.update({
+      where: {
+        userId,
+      },
+      data: {
+        totalPrice: updatedTotalPrice,
+        totalQuantity: updatedTotalQuantity,
       },
     });
 
